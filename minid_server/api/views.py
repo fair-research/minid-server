@@ -237,7 +237,7 @@ def create_entity():
         print("Missing checksum")
         abort(400)
 
-    entity, title, location, content_key = None, None, None, None
+    entity, title, location, content_key, checksum_function = None, None, None, None, None
     checksum = request.json["checksum"] 
     email = request.json["email"]
     code = request.json["code"]
@@ -247,6 +247,9 @@ def create_entity():
 
     if "content_key" in request.json:
         content_key = request.json["content_key"]
+
+    if "checksum_function" in request.json:
+	checksum_function = request.json["checksum_function"]
 
     test = False
     if "test" in request.json:
@@ -265,7 +268,7 @@ def create_entity():
     #else:
     identifier = create_ark(user.name, title, created, test)
     print("Created new identifier %s" % str(identifier))
-    entity = Entity(user, str(identifier), checksum, created, status, content_key)
+    entity = Entity(user, str(identifier), checksum, checksum_function, created, status, content_key)
     db.session.add(entity)
 
     # Get existing locations and titles to avoid adding duplicate
@@ -294,6 +297,8 @@ def create_entity():
 # }
 @app.route('/user', methods=['GET','POST','PUT'])
 def register_user():
+    print ("REGISTERING")
+
     if not request.json:
         print("Request is not JSON")
         abort(400)
@@ -316,8 +321,9 @@ def register_user():
         code = ''
     else:
         code = str(uuid.uuid4())
-
+    print ("querying %s" %code)
     user = Miniduser.query.filter_by(email=email).first()
+    print("after")
     if user is None: 
         user = Miniduser(name, orcid, email, code)
         db.session.add(user)

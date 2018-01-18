@@ -24,6 +24,7 @@ class Entity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String(120), unique=True)
     checksum = db.Column(db.String(120))
+    checksum_function = db.Column(db.String(120))
     content_key = db.Column(db.String(120))
     created = db.Column(db.DateTime())
     status = db.Column(db.String(120))
@@ -32,10 +33,11 @@ class Entity(db.Model):
     miniduser = db.relationship('Miniduser',
             backref=db.backref('entities', lazy='joined'))
 
-    def __init__(self, miniduser, identifier, checksum, created, status, content_key):
+    def __init__(self, miniduser, identifier, checksum, checksum_function, created, status, content_key):
         self.miniduser = miniduser
         self.identifier = identifier
         self.checksum = checksum
+	self.checksum_function = checksum_function
         self.created = created
         self.status = status
         self.content_key = content_key
@@ -46,6 +48,7 @@ class Entity(db.Model):
                 "identifier" : self.identifier,
                 "status" : self.status,
                 "checksum" : self.checksum, 
+		"checksum_function": self.checksum_function,
                 "content_key" : self.content_key,
                 "created" : self.created,
                 "obsoleted_by": self.obsoleted_by,
