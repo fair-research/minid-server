@@ -42,10 +42,15 @@ class Entity(db.Model):
         self.status = status
         self.content_key = content_key
 
+    def get_short_identifier(self):
+        suffix = self.identifier.split('/')
+        return "minid:%s" % suffix[-1]
+
     def get_json(self):
         u = self.miniduser.get_json()
         json = {
                 "identifier" : self.identifier,
+                "short_identifier" : self.get_short_identifier(),
                 "status" : self.status,
                 "checksum" : self.checksum, 
 		"checksum_function": self.checksum_function,
