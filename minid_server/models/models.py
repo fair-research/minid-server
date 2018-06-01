@@ -55,7 +55,7 @@ class Entity(db.Model):
                 "checksum" : self.checksum, 
 		"checksum_function": self.checksum_function,
                 "content_key" : self.content_key,
-                "created" : self.created,
+                "created" : self.created.isoformat(),
                 "obsoleted_by": self.obsoleted_by,
                 "creator": u["name"],
                 "orcid" : u["orcid"],
