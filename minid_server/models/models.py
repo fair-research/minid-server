@@ -97,7 +97,7 @@ class Location(db.Model):
             link = "https://www.globus.org/xfer/StartTransfer?origin=%s" % urllib.quote(ep)
         return {"uri" : self.uri,
                 "link" : link,
-                "created" : self.created,
+                "created" : self.created.isoformat(),
                 "creator" : self.miniduser.name}
 
     def __repr__(self):
@@ -124,7 +124,7 @@ class Title(db.Model):
 
     def get_json(self):
         return {"title" : self.title, 
-                "created" : self.created, 
+                "created" : self.created.isoformat(), 
                 "creator": self.miniduser.name}
 
     def __repr__(self):
